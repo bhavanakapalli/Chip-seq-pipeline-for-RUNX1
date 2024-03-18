@@ -31,7 +31,7 @@ rule fastqc:
         report_zip='results/fastqc/full/{condition}_{rep}_fastqc.zip'
     params:
         outdir = 'results/fastqc/full/'
-    threads: 36
+    threads: 4
     conda:
         'envs/fastqc_env.yml'
     shell:
@@ -43,9 +43,9 @@ rule trimmomatic:
     output:
         'samples/trimmed/full/{condition}_{rep}_trimmed.fastq.gz'
     params:
-        adapters = lambda wildcards: 'materials/project_2_chipseq/adapters.fa',
+        adapters = lambda wildcards: 'materials/project_2_chipseq/TruSeq3-SE.fa',
         trim_options = lambda wildcards: 'ILLUMINACLIP:{params.adapters}:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15'
-    threads: 36
+    threads: 8
     conda:
         'envs/trimmomatic_env.yml'
     shell:
@@ -63,7 +63,7 @@ rule bowtie2_build_gencode:
         'results/bowtie2_index/genome.rev.2.bt2'
     params:
         prefix = 'results/bowtie2_index/genome'
-    threads: 36
+    threads: 16
     conda:
         'envs/bowtie2_env.yml'
     shell:
