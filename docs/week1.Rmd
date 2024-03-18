@@ -6,33 +6,20 @@ date: '2024-03-01'
 
 Use this notebook to quickly write the methods for the week:
 
-Methods
-
-Data Processing Workflow
-
-We developed a comprehensive data processing workflow using Snakemake, a scalable bioinformatics workflow engine, to automate the analysis of sequencing data derived from [specific experiment or study description]. The workflow integrates quality control, adapter trimming, and genome indexing steps, ensuring a standardized analysis pipeline for both subsampled and full sequencing datasets.
-
-Sample Information and Data Retrieval
-
-Sample metadata and sequencing data access information were organized in a sample_sheet.csv, which includes sample names, conditions, replicate identifiers, and FTP links to raw sequencing data. Sequencing data were downloaded from the European Nucleotide Archive (ENA) using wget based on the FTP links specified in the sample sheet.
+Source of Data
+The mRNAseq samples corresponding to developmental stages P0, P4, P7, and Alzheimer's disease (AD) in vivo myocytes were systematically retrieved from the GEO database under accession number GSE64403. 
 
 Quality Control
+The initial quality control was conducted using FastQC (v0.12.0). 
 
-Quality control checks on raw sequencing data were performed using FastQC v0.11.9, assessing basic statistics, per-base sequence quality, sequence duplication levels, and overrepresented sequences. For each sample, both HTML reports and zipped data files were generated and stored in results/fastqc/full/, facilitating detailed quality assessments.
+Read Trimming and Cleaning
+Sequencing reads underwent trimming to remove adapter sequences and low-quality bases. This preprocessing was executed using Trimmomatic (v0.39), employing a set of carefully selected parameters (ILLUMINACLIP:{adapters}:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15).
 
-Adapter Trimming and Quality Filtering
+Reference Genome Indexing, Alignment and Gene Counting
+Bowtie2 (v2.4.2) index was constructed for the gencode mouse primary assembly genome (GRCm39, release m34). Subsequently, reads were aligned to this reference using the STAR aligner (v2.7.11b) with default parameters. Aligned reads were quantified to gene counts using VERSE (v0.1.5) with default parameters and the gencode m34 primary assembly GTF file. 
 
-Adapter sequences and low-quality bases were trimmed using Trimmomatic v0.39. The trimming process involved removing adapter sequences, leading and trailing bases with a quality score below 3, and scanning the read with a 4-base wide sliding window, cutting when the average quality per base drops below 15. The resulting high-quality trimmed reads for each sample were saved in samples/trimmed/full/.
-
-Genome Indexing
-
-To support the alignment of trimmed reads to the human reference genome, we constructed a Bowtie2 v2.4.2 index from the GRCh38 primary assembly. The index building was performed on decompressed reference genome FASTA files, with resulting index files stored in results/bowtie2_index/. This index facilitates efficient read mapping in subsequent analysis steps.
-
-Computational Environment
-
-All analyses were conducted on a high-performance computing cluster, leveraging Conda environments to manage software dependencies and ensure reproducibility. The Snakemake workflow was designed to scale dynamically based on the computational resources available, with specific rules configured to utilize up to 36 threads for intensive tasks such as adapter trimming and genome indexing.
-
-
+Differential Expression Analysis
+Gene counts were aggregated and filtered to exclude genes not expressed across all samples. Normalization and differential expression analysis between specific timepoints (AD vs. P0) were performed using DESeq2 (v1.42.1) with default parameters. 
 
 
 If asked, you may also include any plots or figures in this notebook as well:
