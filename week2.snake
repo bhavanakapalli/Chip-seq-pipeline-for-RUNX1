@@ -5,15 +5,11 @@ sample_csv = pd.read_csv('sample_sheet.csv')
 # Generate unique sample identifiers from the condition and replicate columns
 SAMPLES = sample_csv['name'].tolist()
 
+
+
 rule all:
     input:
-        expand("results/aligned/{sample}_sorted.bam", sample=SAMPLES),
-        expand("results/aligned/{sample}_sorted.bam.bai", sample=SAMPLES),
-        expand("results/qc/{sample}_flagstat.txt", sample=SAMPLES),
-        "results/qc/multiqc_report.html",
-        expand("results/bigwig/{sample}.bw", sample=SAMPLES),
-        "results/analysis/multiBigwigSummary.npz",
-        "results/analysis/plotCorrelation_heatmap.png"
+        "results/multiqc_report.html"
 
 rule bowtie2_align:
     input:

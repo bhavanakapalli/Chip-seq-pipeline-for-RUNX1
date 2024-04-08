@@ -7,7 +7,7 @@ REPS = set(sample_csv['replicate'].tolist())
 rule all:
     input:
         expand('results/fastqc/full/{condition}_{rep}_fastqc.html', condition=CONDITIONS, rep=REPS),
-        expand('samples/trimmed/full/{condition}_{rep}_trimmed.fastq.gz', condition=CONDITIONS, rep=REPS),
+        expand('samples/trimmed/full/{condition}_{rep}_trimmed.fastq', condition=CONDITIONS, rep=REPS),
         'results/bowtie2_index/genome.1.bt2',
         'results/bowtie2_index/genome.2.bt2',
         'results/bowtie2_index/genome.3.bt2',
@@ -41,11 +41,9 @@ rule trimmomatic:
     input:
         'samples/raw/full/{condition}_{rep}.fastq.gz'
     output:
-        'samples/trimmed/full/{condition}_{rep}_trimmed.fastq.gz'
+        'samples/trimmed/full/{condition}_{rep}_trimmed.fastq'
     params:
-        adapters = lambda wildcards: 'materials/project_2_chipseq/TruSeq3-SE.fa',
-        trim_options = lambda wildcards: 'ILLUMINACLIP:{params.adapters}:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15'
-    threads: 8
+        adapters ='results/TruSeq3-SE.fa'
     conda:
         'envs/trimmomatic_env.yml'
     shell:
