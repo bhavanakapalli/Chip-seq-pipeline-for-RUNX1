@@ -6,6 +6,8 @@ In this analysis, we see the role of RUNX1, by building upon the study by Barutc
 ## Methods
 Raw sequencing data were organized using a sample sheet `sample_sheet.csv` and retrieved via the `wget_files` rule. Subsequent quality control involved FastQC (v.0.12.1) for assessing read quality, followed by adapter trimming using Trimmomatic (v0.39). Alignment to the GRCh38 reference genome was achieved with Bowtie2 (v2.5.3), while SAMtools (v1.20) facilitated sorting and indexing of resultant BAM files. Quality metrics were obtained using SAMtools flagstat, and a comprehensive report was generated via MultiQC (v1.21). Read coverage across the genome was computed using deepTools' bamCoverage (v3.5.4), with Pearson correlation coefficients visualized using plotCorrelation. Peak calling was executed using HOMER (v4.11), with BEDTools (v2.31.0) employed for peak intersection analysis. Peaks were subsequently annotated using HOMER's `annotatePeaks.pl` script with a GTF file, and motif enrichment analysis was performed using HOMER's `findMotifsGenome.pl`. Visualization of read coverage around peak regions was accomplished with plotProfile. 
 
+`chip_seq.snake` → full snakemake workflow
+
 ## References
 1. Barutcu, A. R., Hong, D., Lajoie, B. R., McCord, R. P., van Wijnen, A. J., Lian, J. B., Stein, J. L., Dekker, J., Imbalzano, A. N., & Stein, G. S. (2016). RUNX1 contributes to higher-order chromatin organization and gene regulation in breast cancer cells. Biochimica et biophysica acta, 1859(11), 1389–1397. https://doi.org/10.1016/j.bbagrm.2016.08.003
 2. Andrews, S. (2010). FastQC: A Quality Control Tool for High Throughput Sequence Data [Online]. Available online at: http://www.bioinformatics.babraham.ac.uk/projects/fastqc/
